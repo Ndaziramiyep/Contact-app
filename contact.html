@@ -29,6 +29,20 @@
     <div id="contacts"></div>
     
     <script>
+        // Function to save contacts to local storage
+        function saveContacts() {
+            localStorage.setItem('contacts', JSON.stringify(contacts));
+        }
+
+        // Function to load contacts from local storage
+        function loadContacts() {
+            const savedContacts = localStorage.getItem('contacts');
+            if (savedContacts) {
+                contacts = JSON.parse(savedContacts);
+                displayContacts();
+            }
+        }
+
         // Array to store contacts
         let contacts = [];
 
@@ -37,12 +51,13 @@
             const contactsDiv = document.getElementById('contacts');
             contactsDiv.innerHTML = '';
 
-            contacts.forEach(contact => {
+            contacts.forEach((contact, index) => {
                 const contactDiv = document.createElement('div');
                 contactDiv.innerHTML = `
                     <p>Name: ${contact.name}</p>
                     <p>Phone: ${contact.phone}</p>
                     <p>Email: ${contact.email}</p>
+                    <button onclick="deleteContact(${index})">Delete</button>
                 `;
                 contactsDiv.appendChild(contactDiv);
             });
@@ -52,6 +67,14 @@
         function addContact(name, phone, email) {
             contacts.push({ name, phone, email });
             displayContacts();
+            saveContacts();
+        }
+
+        // Function to delete a contact
+        function deleteContact(index) {
+            contacts.splice(index, 1);
+            displayContacts();
+            saveContacts();
         }
 
         // Event listener for form submission
@@ -80,16 +103,20 @@
             const contactsDiv = document.getElementById('contacts');
             contactsDiv.innerHTML = '';
 
-            filteredContacts.forEach(contact => {
+            filteredContacts.forEach((contact, index) => {
                 const contactDiv = document.createElement('div');
                 contactDiv.innerHTML = `
                     <p>Name: ${contact.name}</p>
                     <p>Phone: ${contact.phone}</p>
                     <p>Email: ${contact.email}</p>
+                    <button onclick="deleteContact(${index})">Delete</button>
                 `;
                 contactsDiv.appendChild(contactDiv);
             });
         }
+
+        // Load contacts when the page is load
+        window.addEventListener('load', loadContacts);
     </script>
 </body>
 </html>
