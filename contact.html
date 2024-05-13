@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact App</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Contact App</h1>
+    
+    <!-- Form for adding a new contact -->
+    <form id="contactForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <button type="submit">Add Contact</button>
+    </form>
+    
+    <!-- Search input -->
+    <input type="text" id="searchInput" placeholder="Search contacts...">
+    
+    <!-- Container for displaying contacts -->
+    <div id="contacts"></div>
+    
+    <script>
+        // Array to store contacts
+        let contacts = [];
+
+        // Function to display contacts
+        function displayContacts() {
+            const contactsDiv = document.getElementById('contacts');
+            contactsDiv.innerHTML = '';
+
+            contacts.forEach(contact => {
+                const contactDiv = document.createElement('div');
+                contactDiv.innerHTML = `
+                    <p>Name: ${contact.name}</p>
+                    <p>Phone: ${contact.phone}</p>
+                    <p>Email: ${contact.email}</p>
+                `;
+                contactsDiv.appendChild(contactDiv);
+            });
+        }
+
+        // Function to add a new contact
+        function addContact(name, phone, email) {
+            contacts.push({ name, phone, email });
+            displayContacts();
+        }
+
+        // Event listener for form submission
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            addContact(name, phone, email);
+            this.reset();
+        });
+
+        // Event listener for search input
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredContacts = contacts.filter(contact =>
+                contact.name.toLowerCase().includes(searchTerm) ||
+                contact.phone.includes(searchTerm) ||
+                (contact.email && contact.email.toLowerCase().includes(searchTerm))
+            );
+            displayFilteredContacts(filteredContacts);
+        });
+
+        // Function to display filtered contacts
+        function displayFilteredContacts(filteredContacts) {
+            const contactsDiv = document.getElementById('contacts');
+            contactsDiv.innerHTML = '';
+
+            filteredContacts.forEach(contact => {
+                const contactDiv = document.createElement('div');
+                contactDiv.innerHTML = `
+                    <p>Name: ${contact.name}</p>
+                    <p>Phone: ${contact.phone}</p>
+                    <p>Email: ${contact.email}</p>
+                `;
+                contactsDiv.appendChild(contactDiv);
+            });
+        }
+    </script>
+</body>
+</html>
